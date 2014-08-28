@@ -418,7 +418,7 @@ module Omnibus
     # binaries (correct RPATH, etc).
     #
     # Supported options:
-    #    :aix => :use_gcc    force using gcc/g++ compilers on aix
+    #    :aix => :use_xlc use IBM's xlc variant rather than IBM's cc
     #
     # @param [Hash] env
     # @param [Hash] opts
@@ -432,16 +432,16 @@ module Omnibus
         case Ohai['platform']
         when "aix"
           cc_flags =
-            if opts[:aix] && opts[:aix][:use_gcc]
+            if opts[:aix] && opts[:aix][:use_xlc]
               {
-                "CC" => "gcc -maix64",
-                "CXX" => "g++ -maix64",
-                "CFLAGS" => "-maix64 -O -I#{install_dir}/embedded/include",
+                "CC" => "gxlc",
+                "CXX" => "gxlC",
+                "CFLAGS" => "-O -I#{install_dir}/embedded/include",
                 "LDFLAGS" => "-L#{install_dir}/embedded/lib -Wl,-blibpath:#{install_dir}/embedded/lib:/usr/lib:/lib",
               }
             else
               {
-                "CC" => "xlc -q64",
+                "CC" => "cc -qlanglvl=extc99",
                 "CXX" => "xlC -q64",
                 "CFLAGS" => "-q64 -I#{install_dir}/embedded/include -O",
                 "LDFLAGS" => "-q64 -L#{install_dir}/embedded/lib -Wl,-blibpath:#{install_dir}/embedded/lib:/usr/lib:/lib",

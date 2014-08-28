@@ -37,7 +37,9 @@ module Omnibus
 
     # @see Base#package_name
     def package_name
-      "#{project.name}.#{bff_version}.#{safe_architecture}.bff"
+      # SO AIX doesn't really support any file name on a bff file other than project.version.bff, we'd have
+      # to manually copy if we want to rename it...
+      "#{project.name}.#{bff_version}.bff"
     end
 
     #
@@ -130,7 +132,12 @@ module Omnibus
     # @return [String]
     #
     def safe_architecture
-      Ohai['kernel']['machine']
+      case Ohai['kernel']['machine']
+      when 'powerpc'
+       'ppc64'
+      else
+        Ohai['kernel']['machine']
+      end
     end
   end
 end
