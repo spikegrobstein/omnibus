@@ -113,7 +113,7 @@ module Omnibus
                env = options.delete(:env) || {}
                env = { 'MAKE' => 'gmake' }.merge(env)
                options[:env] = env
-               'gmake -d'
+               'gmake'
              else
                'make'
              end
